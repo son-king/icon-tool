@@ -1,8 +1,8 @@
 {
-  "name": "cc-plugin-demo",
+  "name": "icon-tool",
   "version": "1.0.0",
   "description": "cocos creator plugin",
-  "author": "cc-plugin",
+  "author": "xu_yanfeng",
   "scripts": {
     "ccp-pack": "cc-plugin pack",
     "ccp-serve": "cc-plugin serve"
