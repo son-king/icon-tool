@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "cc-plugin": {
+      "signature": "60b09bd96d29352302236afa9706c72e",
+      "file": true
+    }
+  }
+}
