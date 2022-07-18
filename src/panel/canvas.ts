@@ -6,12 +6,14 @@ import { CornerPosition } from "./data";
 export class Canvas {
     public context: CanvasRenderingContext2D;
     private canvas: HTMLCanvasElement;
-    private icon: Sprite = new Sprite(this);
-    private corner: Sprite = new Sprite(this);
+    public icon: Sprite = new Sprite(this);
+    public corner: Sprite = new Sprite(this);
     private dirty = false;
     private nodes: Node[] = [];
     public cornerPosition: CornerPosition = CornerPosition.RightTop;
     public scale = 1;
+    public transparent = false;
+    public pack = false;
 
     constructor() {
         this.corner.showBoard = false;
@@ -24,7 +26,9 @@ export class Canvas {
         this.context = el.getContext('2d');
         this.reset();
         this.initTouch();
-        requestAnimationFrame(this._loop.bind(this))
+        if (!this.pack) {
+            requestAnimationFrame(this._loop.bind(this))
+        }
     }
 
     private _updateCorner() {
@@ -36,7 +40,7 @@ export class Canvas {
             switch (this.cornerPosition) {
                 case CornerPosition.LeftBottom:
                     cornerX = iconX;
-                    cornerY = iconY + iconHeight-cornerHeight;
+                    cornerY = iconY + iconHeight - cornerHeight;
                     break;
                 case CornerPosition.LeftTop:
                     cornerX = iconX;
@@ -136,13 +140,15 @@ export class Canvas {
     }
 
     reset() {
-        const color = '#777777';
-        this.context.fillStyle = color;
-        this.context.strokeStyle = color;
         const { width, height } = this.canvas;
         this.context.clearRect(0, 0, width, height);
-        this.context.strokeRect(0, 0, width, height);
-        this.context.fillRect(0, 0, width, height);
+        if (!this.transparent) {
+            const color = '#777777';
+            this.context.fillStyle = color;
+            this.context.strokeStyle = color;
+            this.context.strokeRect(0, 0, width, height);
+            this.context.fillRect(0, 0, width, height);
+        }
     }
 
 

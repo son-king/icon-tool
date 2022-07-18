@@ -10,6 +10,7 @@ export default class Sprite extends Node {
     public y: number = 0;
     public scale: number = 1;
     public showBoard: boolean = true;
+    public base64: string = '';
 
     public radius: number = 0;
     public enabledRound: boolean = false;
@@ -17,6 +18,13 @@ export default class Sprite extends Node {
     constructor(canvas: Canvas) {
         super();
         this.canvas = canvas;
+    }
+
+    updateConfig(spr: Sprite) {
+        this.radius = spr.radius;
+        this.enabledRound = spr.enabledRound;
+        this.visible = spr.visible;
+        this.showBoard = false;
     }
 
     initWithImage(img: HTMLImageElement) {
@@ -34,10 +42,12 @@ export default class Sprite extends Node {
         this.img = null;
         this.radius = 0;
         this.enabledRound = false;
+        this.base64 = '';
     }
 
     async initWithBase64(data: string) {
         this._reset();
+        this.base64 = data;
         this.img = await this._load(data);
     }
 

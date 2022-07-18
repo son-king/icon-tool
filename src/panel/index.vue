@@ -16,6 +16,7 @@
     <CCProp name="目标尺寸">
       <CcInputNumber v-model:value="newSize" style="flex:1;" :min="0"></CcInputNumber>
       <CcButton color="green" @click="onAddNewSize">新增</CcButton>
+      <CcButton color="green" @click="onSelectAllSize">全选</CcButton>
     </CCProp>
     <div class="targetSizes">
       <Checkbox :label="`${item.width}*${item.height}`" :value="item.use"
@@ -45,7 +46,7 @@
       <template v-slot:header>
         <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
           <Checkbox v-model:value="enabledCorner"
-                   @change="onChangeCornerEnabled" label="启用"></Checkbox>
+                    @change="onChangeCornerEnabled" label="启用"></Checkbox>
         </div>
       </template>
       <CCProp name="文件">
@@ -77,6 +78,7 @@ import Checkbox from "cc-plugin/src/ui/packages/cc-checkbox/checkbox.vue";
 import CcInputNumber from "cc-plugin/src/ui/packages/cc-input-number/index.vue";
 import CCSection from "cc-plugin/src/ui/packages/cc-section";
 import { CornerPosition } from "./data";
+import { pack } from "./pack";
 
 export default defineComponent({
   name: 'index',
@@ -134,7 +136,7 @@ export default defineComponent({
       onChangeCornerEnabled() {
         Canvas.updateCornerEnabled(enabledCorner.value);
       },
-      onChangeCornerPosition(pos){
+      onChangeCornerPosition(pos) {
         Canvas.updateCornerPosition(pos);
       },
       newSize,
@@ -144,7 +146,8 @@ export default defineComponent({
       pngFile,
       targets,
       onGenBySize() {
-
+        // Canvas.save();
+        pack(400, 400);
       },
       onReplace() {
 
@@ -154,6 +157,22 @@ export default defineComponent({
         if (!allSizeSettings.value.find(el => el.width === size)) {
           allSizeSettings.value.push({ width: size, height: size, use: true });
         }
+      },
+      onSelectAllSize() {
+        let use = true;
+        if (allSizeSettings.value.find(el => !el.use)) {
+          // 全部都是未选中
+          use = true;
+        } else if (!allSizeSettings.value.find(el => !el.use)) {
+          // 全部选中
+          use = false;
+        } else {
+          use = true;
+        }
+        allSizeSettings.value.forEach(el => {
+          el.use = use;
+        })
+
       },
       async onSelectCornerFile() {
         const imageData = await selectFile();
