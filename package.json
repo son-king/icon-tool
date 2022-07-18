@@ -12,6 +12,8 @@
     "@types/node": "^16.11.12"
   },
   "dependencies": {
-    "cc-plugin": "file:.yalc/cc-plugin"
+    "@types/file-saver": "^2.0.5",
+    "cc-plugin": "file:.yalc/cc-plugin",
+    "file-saver": "^2.0.5"
   }
 }
