@@ -14,6 +14,8 @@
   "dependencies": {
     "@types/file-saver": "^2.0.5",
     "cc-plugin": "file:.yalc/cc-plugin",
-    "file-saver": "^2.0.5"
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.0",
+    "size-sensor": "^1.0.1"
   }
 }

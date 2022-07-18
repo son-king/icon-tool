@@ -2,6 +2,7 @@ import fileSaver from 'file-saver'
 import Sprite from './sprite'
 import Node from './node'
 import { CornerPosition } from "./data";
+import { bind } from 'size-sensor'
 
 export class Canvas {
     public context: CanvasRenderingContext2D;
@@ -19,6 +20,20 @@ export class Canvas {
         this.corner.showBoard = false;
         this.nodes.push(this.icon);
         this.nodes.push(this.corner);
+    }
+
+    canPack() {
+        return this.icon.isValid();
+    }
+
+    public onResize(el: HTMLElement) {
+        const width = el.clientWidth;
+        const height = el.clientHeight;
+        this.canvas.setAttribute('width', width.toString());
+        this.canvas.setAttribute('height', height.toString());
+        this.canvas.style.width = `${width}px`;
+        this.canvas.style.height = `${height}px`;
+        this.setDirty(true)
     }
 
     init(el: HTMLCanvasElement) {
@@ -156,6 +171,10 @@ export class Canvas {
         this.canvas.toBlob((blob) => {
             fileSaver(blob, 'test.png')
         }, 'image/png')
+    }
+
+    toBase64(): string {
+        return this.canvas.toDataURL('image/png');
     }
 
     async loadIcon(base64) {

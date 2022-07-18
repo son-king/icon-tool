@@ -1,67 +1,78 @@
 <template>
   <div class="panel">
-    <cc-prop name="目标工程">
-      <CCSelect :data="targets" value="1"></CCSelect>
-    </cc-prop>
-    <CCProp name="图标文件">
-      <CCInput v-model:value="pngFile"></CCInput>
-      <CcButton @click="onSelectIconFile">...</CcButton>
-      <CcButton><i class="iconfont icon-folder"></i></CcButton>
-    </CCProp>
-    <div style="display: flex;flex-direction: row;">
-      <div style="flex:1;"></div>
-      <CcButton @click="onGenBySize" color="blue">生成</CcButton>
-      <CcButton @click="onReplace" color="green">替换</CcButton>
-    </div>
-    <CCProp name="目标尺寸">
-      <CcInputNumber v-model:value="newSize" style="flex:1;" :min="0"></CcInputNumber>
-      <CcButton color="green" @click="onAddNewSize">新增</CcButton>
-      <CcButton color="green" @click="onSelectAllSize">全选</CcButton>
-    </CCProp>
-    <div class="targetSizes">
-      <Checkbox :label="`${item.width}*${item.height}`" :value="item.use"
-                :key="index"
-                style="margin:0 4px;"
-                v-for="(item, index) in allSizeSettings">
-      </Checkbox>
-    </div>
-
     <div class="preview">
-
-      <canvas ref="canvas" tabindex="0">
-
-      </canvas>
+      <canvas ref="canvas" tabindex="0"></canvas>
     </div>
-    <CCSection name="圆角">
-      <template v-slot:header>
-        <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
-          <Checkbox v-model:value="enabledRound" label="启用" @change="onChangeRound"></Checkbox>
-        </div>
-      </template>
-      <CCProp name="尺寸">
-        <CcInputNumber v-model:value="radius" :min="0" style="flex:1;" @change="onChangeRound"></CcInputNumber>
-      </CCProp>
-    </CCSection>
-    <CCSection name="角标">
-      <template v-slot:header>
-        <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
-          <Checkbox v-model:value="enabledCorner"
-                    @change="onChangeCornerEnabled" label="启用"></Checkbox>
-        </div>
-      </template>
-      <CCProp name="文件">
-        <CCInput v-model:value="cornerFile"></CCInput>
-        <CcButton @click="onSelectCornerFile">...</CcButton>
-        <CcButton><i class="iconfont icon-folder"></i></CcButton>
-      </CCProp>
-      <CCProp name="位置">
-        <CcButton @click="onChangeCornerPosition(CornerPosition.LeftTop)">左上</CcButton>
-        <CcButton @click="onChangeCornerPosition(CornerPosition.LeftBottom)">左下</CcButton>
-        <CcButton @click="onChangeCornerPosition(CornerPosition.RightTop)">右上</CcButton>
-        <CcButton @click="onChangeCornerPosition(CornerPosition.RightBottom)">右下</CcButton>
-      </CCProp>
-    </CCSection>
-
+    <div class="settings">
+      <div class="content">
+        <CCSection name="图标">
+          <CCProp name="文件">
+            <CCInput :disabled="true" v-model:value="pngFile"></CCInput>
+            <CcButton @click="onSelectIconFile">...</CcButton>
+            <CcButton v-show="!isWeb"><i class="iconfont icon-folder"></i></CcButton>
+          </CCProp>
+          <CCProp name="生成尺寸">
+            <CcInputNumber v-model:value="newSize" style="flex:1;" :min="0"></CcInputNumber>
+            <CcButton color="green" @click="onAddNewSize">新增</CcButton>
+            <CcButton color="green" @click="onSelectAllSize">全选</CcButton>
+          </CCProp>
+          <div class="targetSizes">
+            <Checkbox v-model:value="item.use"
+                      :key="index"
+                      style="margin:0 4px;"
+                      v-for="(item, index) in allSizeSettings">
+              <template v-slot:label>
+                <span style="user-select: none;cursor: pointer;"
+                      @click="onClickItemSize(item)"
+                >{{ item.width }}*{{ item.height }}</span>
+              </template>
+            </Checkbox>
+          </div>
+        </CCSection>
+        <CCSection name="圆角">
+          <template v-slot:header>
+            <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
+              <Checkbox v-model:value="enabledRound" label="启用" @change="onChangeRound"></Checkbox>
+            </div>
+          </template>
+          <CCProp name="尺寸">
+            <CcInputNumber v-model:value="radius" :min="0" style="flex:1;" @change="onChangeRound"></CcInputNumber>
+          </CCProp>
+        </CCSection>
+        <CCSection name="角标">
+          <template v-slot:header>
+            <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
+              <Checkbox v-model:value="enabledCorner"
+                        @change="onChangeCornerEnabled" label="启用"></Checkbox>
+            </div>
+          </template>
+          <CCProp name="文件">
+            <CCInput :disabled="true" v-model:value="cornerFile"></CCInput>
+            <CcButton @click="onSelectCornerFile">...</CcButton>
+            <CcButton v-show="!isWeb"><i class="iconfont icon-folder"></i></CcButton>
+          </CCProp>
+          <CCProp name="位置">
+            <div style="flex:1;display: flex;flex-direction: row;justify-content: flex-end">
+              <CcButton @click="onChangeCornerPosition(CornerPosition.LeftTop)">左上</CcButton>
+              <CcButton @click="onChangeCornerPosition(CornerPosition.LeftBottom)">左下</CcButton>
+              <CcButton @click="onChangeCornerPosition(CornerPosition.RightTop)">右上</CcButton>
+              <CcButton @click="onChangeCornerPosition(CornerPosition.RightBottom)">右下</CcButton>
+            </div>
+          </CCProp>
+        </CCSection>
+        <CCSection v-if="!isWeb" name="替换项目图标">
+          <cc-prop name="目标工程">
+            <CCSelect :data="targets" value="1"></CCSelect>
+          </cc-prop>
+          <div style="display: flex;flex-direction: row;justify-content: flex-end;">
+            <CcButton @click="onReplace" color="green">替换</CcButton>
+          </div>
+        </CCSection>
+      </div>
+      <div style="display: flex;flex-direction: row;justify-content: flex-end;margin:3px 0;">
+        <CcButton @click="onGenBySize" color="blue">生成</CcButton>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -78,7 +89,9 @@ import Checkbox from "cc-plugin/src/ui/packages/cc-checkbox/checkbox.vue";
 import CcInputNumber from "cc-plugin/src/ui/packages/cc-input-number/index.vue";
 import CCSection from "cc-plugin/src/ui/packages/cc-section";
 import { CornerPosition } from "./data";
-import { pack } from "./pack";
+import { packZipAndDownload, createImage } from "./pack";
+import { bind } from "size-sensor";
+import { saveAs } from "file-saver";
 
 export default defineComponent({
   name: 'index',
@@ -99,6 +112,10 @@ export default defineComponent({
     onMounted(() => {
       const el: HTMLCanvasElement = canvas.value as HTMLCanvasElement;
       Canvas.init(el);
+      Canvas.onResize(el.parentElement);
+      bind(el.parentElement, () => {
+        Canvas.onResize(el.parentElement);
+      });
     })
     const newSize = ref(100);
     const enabledCorner = ref(true);
@@ -124,7 +141,10 @@ export default defineComponent({
       return imageData;
     }
 
+    const isWeb = ref(CCP.Adaptation.Env.isWeb);
+    // isWeb.value = false;
     return {
+      isWeb,
       enabledRound,
       radius,
       onChangeRound() {
@@ -146,8 +166,27 @@ export default defineComponent({
       pngFile,
       targets,
       onGenBySize() {
-        // Canvas.save();
-        pack(400, 400);
+        const width = Canvas.icon.width;
+        const height = Canvas.icon.height;
+        if (width != height) {
+          console.log(`icon 宽(${width})高(${height})不一致，暂不支持输出！`)
+          return;
+        }
+        let arr = [];
+        allSizeSettings.value.forEach(setting => {
+          if (setting.use) {
+            arr.push({
+              width: setting.width,
+              height: setting.height,
+              name: `icon-${setting.width}.png`
+            })
+          }
+        })
+        if (arr.length === 0) {
+          console.log('没有要生成的图片')
+          return;
+        }
+        packZipAndDownload(arr);
       },
       onReplace() {
 
@@ -185,6 +224,11 @@ export default defineComponent({
         if (imageData) {
           Canvas.loadIcon(imageData)
         }
+      },
+      async onClickItemSize(item) {
+        const { width, height } = item;
+        const data = await createImage(width, height);
+        saveAs(data, `icon-${width}*${height}.png`)
       }
     }
   }
@@ -194,18 +238,33 @@ export default defineComponent({
 <style scoped lang="less">
 .panel {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
   height: 100%;
 
   .preview {
     border: 1px solid #999999;
+    flex: 1;
 
     canvas {
       background-color: #777777;
       outline: none;
       width: 100%;
       height: 100%;
+    }
+  }
+
+  .settings {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .content {
+      flex: 1;
+      overflow: auto;
+      flex-direction: column;
+      border: 1px solid #fd942b;
+      margin: 0 5px;
     }
   }
 

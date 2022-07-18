@@ -47,8 +47,13 @@ export default class Sprite extends Node {
 
     async initWithBase64(data: string) {
         this._reset();
-        this.base64 = data;
-        this.img = await this._load(data);
+        if (data.indexOf('base64') !== -1) {
+            this.base64 = data;
+            this.img = await this._load(data);
+        } else {
+            this.base64 = '';
+            this.img = null;
+        }
     }
 
     private _load(data: string): Promise<HTMLImageElement> {
@@ -80,11 +85,8 @@ export default class Sprite extends Node {
         }
     }
 
-    changeScale(v) {
-        this.scale += v;
-        if (this.scale <= 0) {
-            this.scale = 0;
-        }
+    updateScale(packWidth) {
+        this.scale = packWidth / this.width;
     }
 
     cutRoundedRect(ctx, radius, x, y, w, h) {
