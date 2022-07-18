@@ -1,16 +1,20 @@
 import fileSaver from 'file-saver'
 import Sprite from './sprite'
 import Node from './node'
+import { CornerPosition } from "./data";
 
-class Canvas {
-    private context: CanvasRenderingContext2D;
+export class Canvas {
+    public context: CanvasRenderingContext2D;
     private canvas: HTMLCanvasElement;
-    private icon: Sprite = new Sprite();
-    private corner: Sprite = new Sprite();
+    private icon: Sprite = new Sprite(this);
+    private corner: Sprite = new Sprite(this);
     private dirty = false;
     private nodes: Node[] = [];
+    public cornerPosition: CornerPosition = CornerPosition.RightTop;
+    public scale = 1;
 
     constructor() {
+        this.corner.showBoard = false;
         this.nodes.push(this.icon);
         this.nodes.push(this.corner);
     }
@@ -23,17 +27,66 @@ class Canvas {
         requestAnimationFrame(this._loop.bind(this))
     }
 
+    private _updateCorner() {
+        if (this.corner.isValid() && this.icon.isValid()) {
+            const { width: iconWidth, height: iconHeight } = this.icon.getContentSize();
+            const { x: iconX, y: iconY } = this.icon;
+            const { width: cornerWidth, height: cornerHeight } = this.corner.getContentSize();
+            let cornerX = iconX, cornerY = iconY;
+            switch (this.cornerPosition) {
+                case CornerPosition.LeftBottom:
+                    cornerX = iconX;
+                    cornerY = iconY + iconHeight-cornerHeight;
+                    break;
+                case CornerPosition.LeftTop:
+                    cornerX = iconX;
+                    cornerY = iconY;
+                    break;
+                case CornerPosition.RightBottom:
+                    cornerX = iconX + iconWidth - cornerWidth;
+                    cornerY = iconY + iconHeight - cornerHeight;
+
+                    break;
+                case CornerPosition.RightTop:
+                    cornerX = iconX + iconWidth - cornerWidth;
+                    cornerY = iconY;
+                    break;
+            }
+            this.corner.x = cornerX;
+            this.corner.y = cornerY;
+        }
+
+    }
+
+    updateRadius(enabled, radius) {
+        this.icon.radius = radius;
+        this.icon.enabledRound = enabled;
+        this.setDirty(true);
+    }
+
+    updateCornerPosition(position: CornerPosition) {
+        this.cornerPosition = position;
+        this.setDirty(true);
+    }
+
+    updateCornerEnabled(enabled: boolean) {
+        this.corner.visible = enabled;
+        this.setDirty(true);
+
+    }
+
     private setDirty(b) {
         this.dirty = b;
     }
 
     private initTouch() {
-        const { icon, corner, canvas } = this;
+        const { icon, corner, canvas, nodes } = this;
         const self = this;
 
         function mousemove(event: MouseEvent) {
-            icon.x += event.movementX;
-            icon.y += event.movementY;
+            nodes.forEach(node => {
+                node.onMove(event)
+            })
             self.setDirty(true);
         }
 
@@ -56,7 +109,10 @@ class Canvas {
         })
         canvas.addEventListener('wheel', (event: WheelEvent) => {
             const v = 0.01 * event.deltaY;
-            icon.changeScale(v);
+            this.scale += v;
+            if (this.scale <= 0) {
+                this.scale = 0;
+            }
             this.setDirty(true);
         })
     }
@@ -71,41 +127,24 @@ class Canvas {
 
     update() {
         this.reset();
+        this._updateCorner();
         this.nodes.forEach(node => {
-            node.draw(this.context);
+            if (node.visible) {
+                node.draw(this);
+            }
         })
     }
 
     reset() {
-        this.context.fillStyle = 'white';
-        this.context.strokeStyle = 'white';
+        const color = '#777777';
+        this.context.fillStyle = color;
+        this.context.strokeStyle = color;
         const { width, height } = this.canvas;
         this.context.clearRect(0, 0, width, height);
         this.context.strokeRect(0, 0, width, height);
         this.context.fillRect(0, 0, width, height);
     }
 
-    cutRoundedRect(ctx, radius, x, y, w, h) {
-        var left = x;
-        var top = y;
-        var right = x + w;
-        var bottom = y + h;
-
-        ctx.globalCompositeOperation = 'destination-in';
-        ctx.fillStyle = 'black';
-
-        ctx.beginPath();
-        ctx.moveTo(left + radius, top);
-        ctx.lineTo(right - radius, top);
-        ctx.quadraticCurveTo(right, top, right, top + radius);
-        ctx.lineTo(right, bottom - radius);
-        ctx.quadraticCurveTo(right, bottom, right - radius, bottom);
-        ctx.lineTo(left + radius, bottom);
-        ctx.quadraticCurveTo(left, bottom, left, bottom - radius);
-        ctx.lineTo(left, top + radius);
-        ctx.quadraticCurveTo(left, top, left + radius, top);
-        ctx.fill();
-    };
 
     save() {
         this.canvas.toBlob((blob) => {

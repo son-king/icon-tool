@@ -34,17 +34,18 @@
     <CCSection name="圆角">
       <template v-slot:header>
         <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
-          <Checkbox :value="enabledRound" label="启用"></Checkbox>
+          <Checkbox v-model:value="enabledRound" label="启用" @change="onChangeRound"></Checkbox>
         </div>
       </template>
       <CCProp name="尺寸">
-        <CcInputNumber :value=4 :min="0" style="flex:1;"></CcInputNumber>
+        <CcInputNumber v-model:value="radius" :min="0" style="flex:1;" @change="onChangeRound"></CcInputNumber>
       </CCProp>
     </CCSection>
     <CCSection name="角标">
       <template v-slot:header>
         <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
-          <Checkbox :value="enabledCorner" label="启用"></Checkbox>
+          <Checkbox v-model:value="enabledCorner"
+                   @change="onChangeCornerEnabled" label="启用"></Checkbox>
         </div>
       </template>
       <CCProp name="文件">
@@ -53,7 +54,10 @@
         <CcButton><i class="iconfont icon-folder"></i></CcButton>
       </CCProp>
       <CCProp name="位置">
-        <CcButton>left</CcButton>
+        <CcButton @click="onChangeCornerPosition(CornerPosition.LeftTop)">左上</CcButton>
+        <CcButton @click="onChangeCornerPosition(CornerPosition.LeftBottom)">左下</CcButton>
+        <CcButton @click="onChangeCornerPosition(CornerPosition.RightTop)">右上</CcButton>
+        <CcButton @click="onChangeCornerPosition(CornerPosition.RightBottom)">右下</CcButton>
       </CCProp>
     </CCSection>
 
@@ -72,6 +76,7 @@ import CCP from "cc-plugin/src/ccp/entry-render";
 import Checkbox from "cc-plugin/src/ui/packages/cc-checkbox/checkbox.vue";
 import CcInputNumber from "cc-plugin/src/ui/packages/cc-input-number/index.vue";
 import CCSection from "cc-plugin/src/ui/packages/cc-section";
+import { CornerPosition } from "./data";
 
 export default defineComponent({
   name: 'index',
@@ -95,6 +100,7 @@ export default defineComponent({
     })
     const newSize = ref(100);
     const enabledCorner = ref(true);
+    const radius = ref(0);
     const enabledRound = ref(true);
 
     async function selectFile(): Promise<string | null> {
@@ -117,8 +123,20 @@ export default defineComponent({
     }
 
     return {
-      enabledCorner,
       enabledRound,
+      radius,
+      onChangeRound() {
+        Canvas.updateRadius(enabledRound.value, radius.value);
+      },
+
+      CornerPosition,
+      enabledCorner,
+      onChangeCornerEnabled() {
+        Canvas.updateCornerEnabled(enabledCorner.value);
+      },
+      onChangeCornerPosition(pos){
+        Canvas.updateCornerPosition(pos);
+      },
       newSize,
       cornerFile,
       allSizeSettings,
@@ -165,6 +183,7 @@ export default defineComponent({
     border: 1px solid #999999;
 
     canvas {
+      background-color: #777777;
       outline: none;
       width: 100%;
       height: 100%;

@@ -1,5 +1,9 @@
+import { Canvas } from "./canvas";
+
 export default class Node {
-    draw(context: CanvasRenderingContext2D) {
+    public visible: boolean = true;
+    draw(canvas:Canvas) {
 
     }
+    onMove(event:MouseEvent){}
 }
