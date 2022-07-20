@@ -10,6 +10,7 @@ import pluginConfig from '../../cc-plugin.config'
 import ccui from 'cc-plugin/src/ui/packages/index'
 import 'cc-plugin/src/ui/iconfont/use.css'
 import 'cc-plugin/src/ui/iconfont/iconfont.css'
+import './global.less'
 
 export default CCP.init(pluginConfig, {
     ready: function (rootElement: any, args: any) {

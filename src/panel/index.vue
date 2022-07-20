@@ -6,7 +6,8 @@
     <div class="settings">
       <div class="content">
         <CCSection name="图标">
-          <CCProp name="文件">
+          <Image @change="onSelectIcon"></Image>
+          <CCProp name="文件" v-if="false">
             <CCInput :disabled="true" v-model:value="pngFile"></CCInput>
             <CcButton @click="onSelectIconFile">...</CcButton>
             <CcButton v-show="!isWeb"><i class="iconfont icon-folder"></i></CcButton>
@@ -39,27 +40,7 @@
             <CcInputNumber v-model:value="radius" :min="0" style="flex:1;" @change="onChangeRound"></CcInputNumber>
           </CCProp>
         </CCSection>
-        <CCSection name="角标">
-          <template v-slot:header>
-            <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
-              <Checkbox v-model:value="enabledCorner"
-                        @change="onChangeCornerEnabled" label="启用"></Checkbox>
-            </div>
-          </template>
-          <CCProp name="文件">
-            <CCInput :disabled="true" v-model:value="cornerFile"></CCInput>
-            <CcButton @click="onSelectCornerFile">...</CcButton>
-            <CcButton v-show="!isWeb"><i class="iconfont icon-folder"></i></CcButton>
-          </CCProp>
-          <CCProp name="位置">
-            <div style="flex:1;display: flex;flex-direction: row;justify-content: flex-end">
-              <CcButton @click="onChangeCornerPosition(CornerPosition.LeftTop)">左上</CcButton>
-              <CcButton @click="onChangeCornerPosition(CornerPosition.LeftBottom)">左下</CcButton>
-              <CcButton @click="onChangeCornerPosition(CornerPosition.RightTop)">右上</CcButton>
-              <CcButton @click="onChangeCornerPosition(CornerPosition.RightBottom)">右下</CcButton>
-            </div>
-          </CCProp>
-        </CCSection>
+        <corner></corner>
         <CCSection v-if="!isWeb" name="替换项目图标">
           <cc-prop name="目标工程">
             <CCSelect :data="targets" value="1"></CCSelect>
@@ -92,11 +73,15 @@ import { CornerPosition } from "./data";
 import { packZipAndDownload, createImage } from "./pack";
 import { bind } from "size-sensor";
 import { saveAs } from "file-saver";
+import Image from './img.vue';
+import { selectFile } from "./util";
+import Corner from "./corner.vue";
 
 export default defineComponent({
   name: 'index',
   components: {
-    CCProp, CCSelect, CCInput, CcButton,
+    Corner,
+    CCProp, CCSelect, CCInput, CcButton, Image,
     CCSection,
     Checkbox, CcInputNumber
   },
@@ -118,27 +103,15 @@ export default defineComponent({
       });
     })
     const newSize = ref(100);
-    const enabledCorner = ref(true);
     const radius = ref(0);
     const enabledRound = ref(true);
 
-    async function selectFile(): Promise<string | null> {
-      let imageData = null;
-      const ret = await CCP.Adaptation.Dialog.select({
-        title: '选择文件',
-        type: 'file',
-        multi: false,
-        filters: [{ name: 'png', extensions: ['.png'] }]
-      });
-      const keys = Object.keys(ret);
-      if (keys.length) {
-        if (CCP.Adaptation.Env.isWeb) {
-          imageData = ret[keys[0]];
-        }
 
 
+    function onSelectIcon(data: string) {
+      if (data) {
+        Canvas.loadIcon(data);
       }
-      return imageData;
     }
 
     const isWeb = ref(CCP.Adaptation.Env.isWeb);
@@ -151,14 +124,7 @@ export default defineComponent({
         Canvas.updateRadius(enabledRound.value, radius.value);
       },
 
-      CornerPosition,
-      enabledCorner,
-      onChangeCornerEnabled() {
-        Canvas.updateCornerEnabled(enabledCorner.value);
-      },
-      onChangeCornerPosition(pos) {
-        Canvas.updateCornerPosition(pos);
-      },
+
       newSize,
       cornerFile,
       allSizeSettings,
@@ -213,17 +179,10 @@ export default defineComponent({
         })
 
       },
-      async onSelectCornerFile() {
-        const imageData = await selectFile();
-        if (imageData) {
-          Canvas.loadCorner(imageData)
-        }
-      },
+      onSelectIcon,
       async onSelectIconFile() {
         const imageData = await selectFile();
-        if (imageData) {
-          Canvas.loadIcon(imageData)
-        }
+        onSelectIcon(imageData)
       },
       async onClickItemSize(item) {
         const { width, height } = item;
