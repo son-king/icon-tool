@@ -1,11 +1,13 @@
 <template>
   <div class="panel">
     <div class="preview">
-      <canvas ref="canvas" tabindex="0"></canvas>
+      <div style="position: absolute; top: 0;left: 0;">预览：</div>
+      <canvas style="display: block;" ref="canvas" tabindex="0"></canvas>
     </div>
     <div class="settings">
       <div class="content">
         <CCSection name="图标">
+          <!--          <img-cut ></img-cut>-->
           <Image @change="onSelectIcon"></Image>
           <CCProp name="文件" v-if="false">
             <CCInput :disabled="true" v-model:value="pngFile"></CCInput>
@@ -51,7 +53,7 @@
         </CCSection>
       </div>
       <div style="display: flex;flex-direction: row;justify-content: flex-end;margin:3px 0;">
-        <CcButton @click="onGenBySize" color="blue">生成</CcButton>
+        <CcButton @click="onGenBySize" color="blue">批量生成</CcButton>
       </div>
     </div>
   </div>
@@ -76,10 +78,12 @@ import { saveAs } from "file-saver";
 import Image from './img.vue';
 import { selectFile } from "./util";
 import Corner from "./corner.vue";
+import ImgCut from "./cut/cut.vue";
 
 export default defineComponent({
   name: 'index',
   components: {
+    ImgCut,
     Corner,
     CCProp, CCSelect, CCInput, CcButton, Image,
     CCSection,
@@ -105,7 +109,6 @@ export default defineComponent({
     const newSize = ref(100);
     const radius = ref(0);
     const enabledRound = ref(true);
-
 
 
     function onSelectIcon(data: string) {
@@ -202,14 +205,18 @@ export default defineComponent({
   height: 100%;
 
   .preview {
+    position: relative;
+    overflow: hidden;
     border: 1px solid #999999;
     flex: 1;
+    display: flex;
+    flex-direction: column;
 
     canvas {
+      flex: 1;
       background-color: #777777;
       outline: none;
       width: 100%;
-      height: 100%;
     }
   }
 

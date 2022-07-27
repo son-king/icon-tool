@@ -4,6 +4,10 @@
     "experimentalDecorators": true,
     "target": "ES6",
     "module": "commonjs",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "lib": [
+      "es6",
+      "dom"
+    ]
   }
 }

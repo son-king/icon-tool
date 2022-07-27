@@ -1,13 +1,17 @@
 <template>
   <div class="root">
     <canvas ref="canvas"></canvas>
-    <svg id="drawing"></svg>
+    <svg id="drawing" v-show="imageData"></svg>
+    <div class="add" @click="onClickAdd" v-if="!imageData">
+      <span>+</span>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import PaintInstance from "./paint";
 import { bind } from "size-sensor";
+import { selectFile } from "../util";
 
 export default defineComponent({
   name: 'img-cut',
@@ -22,8 +26,17 @@ export default defineComponent({
         PaintInstance.onResize(el.parentElement);
       })
     })
+    const imageData = ref("");
     return {
       canvas,
+      imageData,
+      async onClickAdd() {
+        const data = await selectFile();
+        if (data) {
+          imageData.value = data;
+          PaintInstance.loadImage(data);
+        }
+      }
     }
   }
 })
@@ -36,6 +49,24 @@ export default defineComponent({
 
   canvas {
     display: block;
+  }
+
+  .add {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+
+    span {
+      font-size: 66px;
+      user-select: none;
+    }
   }
 
   #drawing {

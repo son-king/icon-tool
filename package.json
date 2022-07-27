@@ -8,14 +8,17 @@
     "ccp-serve": "cc-plugin serve"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "@types/fs-extra": "^9.0.1",
     "@types/node": "^16.11.12"
   },
   "dependencies": {
-    "@types/file-saver": "^2.0.5",
+    "@svgdotjs/svg.js": "^3.1.2",
+    "@types/tinycolor2": "^1.4.3",
     "cc-plugin": "file:.yalc/cc-plugin",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.0",
-    "size-sensor": "^1.0.1"
+    "size-sensor": "^1.0.1",
+    "tinycolor2": "^1.4.2"
   }
 }
