@@ -11,8 +11,8 @@ export async function selectFile(): Promise<string | null> {
     const keys = Object.keys(ret);
     if (keys.length) {
         if (CCP.Adaptation.Env.isWeb) {
-            imageData = ret[keys[0]];
         }
+        imageData = ret[keys[0]];
     }
     return imageData;
 }

@@ -43,7 +43,7 @@
           </CCProp>
         </CCSection>
         <corner></corner>
-        <CCSection v-if="!isWeb" name="替换项目图标">
+        <CCSection v-if="!isWeb&&false" name="替换项目图标">
           <cc-prop name="目标工程">
             <CCSelect :data="targets" value="1"></CCSelect>
           </cc-prop>

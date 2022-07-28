@@ -35,6 +35,7 @@ const manifest: CocosPluginManifest = {
 const options: CocosPluginOptions = {
     // type: PluginType.PluginV2,
     type: PluginType.Web,
+    // type: PluginType.PluginV3,
     server: {
         enabled: true,
         port: 2022,
