@@ -11,7 +11,7 @@ const manifest: CocosPluginManifest = {
       name: "main",
       type: Panel.Type.DockAble,
       main: "./src/panel/index.ts",
-      title: "CC-Plugin",
+      title: "icon-tool",
       width: 900,
       height: 900,
       minWidth: 550,
@@ -37,8 +37,8 @@ const options: CocosPluginOptions = {
   },
   watchBuild: true,
   outputProject: {
-    v2: "/Users/xyf/Documents/project/creator-plugin/v249/",
-    v3: "/Users/xyf/Documents/project/creator-plugin/v352/",
+    v2: "",
+    v3: "",
     web: "./dist",
   },
 };
