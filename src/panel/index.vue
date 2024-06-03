@@ -1,8 +1,8 @@
 <template>
   <div class="panel">
     <div class="preview">
-      <div style="position: absolute; top: 0;left: 0;">预览：</div>
-      <canvas style="display: block;" ref="canvas" tabindex="0"></canvas>
+      <div style="position: absolute; top: 0; left: 0">预览：</div>
+      <canvas style="display: block" ref="canvas" tabindex="0"></canvas>
     </div>
     <div class="settings">
       <div class="content">
@@ -15,88 +15,83 @@
             <CcButton v-show="!isWeb"><i class="iconfont icon-folder"></i></CcButton>
           </CCProp>
           <CCProp name="生成尺寸">
-            <CcInputNumber v-model:value="newSize" style="flex:1;" :min="0"></CcInputNumber>
+            <CcInputNumber v-model:value="newSize" style="flex: 1" :min="0"></CcInputNumber>
             <CcButton color="green" @click="onAddNewSize">新增</CcButton>
             <CcButton color="green" @click="onSelectAllSize">全选</CcButton>
           </CCProp>
           <div class="targetSizes">
-            <Checkbox v-model:value="item.use"
-                      :key="index"
-                      style="margin:0 4px;"
-                      v-for="(item, index) in allSizeSettings">
+            <Checkbox v-model:value="item.use" :key="index" style="margin: 0 4px" v-for="(item, index) in allSizeSettings">
               <template v-slot:label>
-                <span style="user-select: none;cursor: pointer;"
-                      @click="onClickItemSize(item)"
-                >{{ item.width }}*{{ item.height }}</span>
+                <span style="user-select: none; cursor: pointer" @click="onClickItemSize(item)">{{ item.width }}*{{ item.height }}</span>
               </template>
             </Checkbox>
           </div>
         </CCSection>
         <CCSection name="圆角">
           <template v-slot:header>
-            <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
+            <div style="display: flex; flex: 1; flex-direction: row; justify-content: flex-end">
               <Checkbox v-model:value="enabledRound" label="启用" @change="onChangeRound"></Checkbox>
             </div>
           </template>
           <CCProp name="尺寸">
-            <CcInputNumber v-model:value="radius" :min="0" style="flex:1;" @change="onChangeRound"></CcInputNumber>
+            <CcInputNumber v-model:value="radius" :min="0" style="flex: 1" @change="onChangeRound"></CcInputNumber>
           </CCProp>
         </CCSection>
         <corner></corner>
-        <CCSection v-if="!isWeb&&false" name="替换项目图标">
+        <CCSection v-if="!isWeb && false" name="替换项目图标">
           <cc-prop name="目标工程">
             <CCSelect :data="targets" value="1"></CCSelect>
           </cc-prop>
-          <div style="display: flex;flex-direction: row;justify-content: flex-end;">
+          <div style="display: flex; flex-direction: row; justify-content: flex-end">
             <CcButton @click="onReplace" color="green">替换</CcButton>
           </div>
         </CCSection>
       </div>
-      <div style="display: flex;flex-direction: row;justify-content: flex-end;margin:3px 0;">
+      <div style="display: flex; flex-direction: row; justify-content: flex-end; margin: 3px 0">
         <CcButton @click="onGenBySize" color="blue">批量生成</CcButton>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-
-import { defineComponent, onMounted, ref, provide, nextTick } from 'vue'
-import PluginConfig from '../../cc-plugin.config'
-import CCProp from "cc-plugin/src/ui/packages/cc-prop";
-import CCSelect from "cc-plugin/src/ui/packages/cc-select";
-import CCInput from "cc-plugin/src/ui/packages/cc-input";
-import CcButton from "cc-plugin/src/ui/packages/cc-button";
+import { defineComponent, onMounted, ref, provide, nextTick } from "vue";
+import PluginConfig from "../../cc-plugin.config";
 import Canvas from "./canvas";
 import CCP from "cc-plugin/src/ccp/entry-render";
-import Checkbox from "cc-plugin/src/ui/packages/cc-checkbox/checkbox.vue";
-import CcInputNumber from "cc-plugin/src/ui/packages/cc-input-number/index.vue";
-import CCSection from "cc-plugin/src/ui/packages/cc-section";
 import { CornerPosition } from "./data";
 import { packZipAndDownload, createImage } from "./pack";
 import { bind } from "size-sensor";
 import { saveAs } from "file-saver";
-import Image from './img.vue';
+import Image from "./img.vue";
 import { selectFile } from "./util";
 import Corner from "./corner.vue";
 import ImgCut from "./cut/cut.vue";
-
+import ccui from "@xuyanfeng/cc-ui";
+const { CCButtonGroup, CCSection, CCCheckBox, CCInputNumber, CCButton, CCProp, CCInput, CCSelect } = ccui.components;
 export default defineComponent({
-  name: 'index',
+  name: "index",
   components: {
     ImgCut,
     Corner,
-    CCProp, CCSelect, CCInput, CcButton, Image,
+    Image,
+    CCButtonGroup,
     CCSection,
-    Checkbox, CcInputNumber
+    CCCheckBox,
+    CCInputNumber,
+    CCButton,
+    CCProp,
+    CCInput,
+    CCSelect,
   },
   setup(props, { emit }) {
-
-    const allSizeSettings = ref([20, 29, 40, 58, 60, 76, 80, 87, 120, 152, 167, 180].map(val => {
-      return { width: val, height: val, use: false };
-    }));
-    const targets = ref([{ label: 'android', value: 1 }])
-    const pngFile = ref('111')
-    const cornerFile = ref('');
+    const allSizeSettings = ref(
+      [20, 29, 40, 58, 60, 76, 80, 87, 120, 152, 167, 180].map((val) => {
+        return { width: val, height: val, use: false };
+      })
+    );
+    const targets = ref([{ label: "android", value: 1 }]);
+    const pngFile = ref("111");
+    const cornerFile = ref("");
     const canvas = ref();
     onMounted(() => {
       const el: HTMLCanvasElement = canvas.value as HTMLCanvasElement;
@@ -105,11 +100,10 @@ export default defineComponent({
       bind(el.parentElement, () => {
         Canvas.onResize(el.parentElement);
       });
-    })
+    });
     const newSize = ref(100);
     const radius = ref(0);
     const enabledRound = ref(true);
-
 
     function onSelectIcon(data: string) {
       if (data) {
@@ -127,7 +121,6 @@ export default defineComponent({
         Canvas.updateRadius(enabledRound.value, radius.value);
       },
 
-
       newSize,
       cornerFile,
       allSizeSettings,
@@ -138,63 +131,60 @@ export default defineComponent({
         const width = Canvas.icon.width;
         const height = Canvas.icon.height;
         if (width != height) {
-          console.log(`icon 宽(${width})高(${height})不一致，暂不支持输出！`)
+          console.log(`icon 宽(${width})高(${height})不一致，暂不支持输出！`);
           return;
         }
         let arr = [];
-        allSizeSettings.value.forEach(setting => {
+        allSizeSettings.value.forEach((setting) => {
           if (setting.use) {
             arr.push({
               width: setting.width,
               height: setting.height,
-              name: `icon-${setting.width}.png`
-            })
+              name: `icon-${setting.width}.png`,
+            });
           }
-        })
+        });
         if (arr.length === 0) {
-          console.log('没有要生成的图片')
+          console.log("没有要生成的图片");
           return;
         }
         packZipAndDownload(arr);
       },
-      onReplace() {
-
-      },
+      onReplace() {},
       onAddNewSize() {
         const size = newSize.value;
-        if (!allSizeSettings.value.find(el => el.width === size)) {
+        if (!allSizeSettings.value.find((el) => el.width === size)) {
           allSizeSettings.value.push({ width: size, height: size, use: true });
         }
       },
       onSelectAllSize() {
         let use = true;
-        if (allSizeSettings.value.find(el => !el.use)) {
+        if (allSizeSettings.value.find((el) => !el.use)) {
           // 全部都是未选中
           use = true;
-        } else if (!allSizeSettings.value.find(el => !el.use)) {
+        } else if (!allSizeSettings.value.find((el) => !el.use)) {
           // 全部选中
           use = false;
         } else {
           use = true;
         }
-        allSizeSettings.value.forEach(el => {
+        allSizeSettings.value.forEach((el) => {
           el.use = use;
-        })
-
+        });
       },
       onSelectIcon,
       async onSelectIconFile() {
         const imageData = await selectFile();
-        onSelectIcon(imageData)
+        onSelectIcon(imageData);
       },
       async onClickItemSize(item) {
         const { width, height } = item;
         const data = await createImage(width, height);
-        saveAs(data, `icon-${width}*${height}.png`)
-      }
-    }
-  }
-})
+        saveAs(data, `icon-${width}*${height}.png`);
+      },
+    };
+  },
+});
 </script>
 
 <style scoped lang="less">

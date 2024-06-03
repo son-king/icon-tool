@@ -1,9 +1,8 @@
 <template>
   <CCSection name="角标" class="corner">
     <template v-slot:header>
-      <div style="display: flex; flex:1; flex-direction: row; justify-content: flex-end;">
-        <Checkbox v-model:value="enabledCorner"
-                  @change="onChangeCornerEnabled" label="启用"></Checkbox>
+      <div style="display: flex; flex: 1; flex-direction: row; justify-content: flex-end">
+        <Checkbox v-model:value="enabledCorner" @change="onChangeCornerEnabled" label="启用"></Checkbox>
       </div>
     </template>
     <div class="content">
@@ -15,58 +14,47 @@
       </CCProp>
       <div class="pos">
         <div class="row">
-          <div class="item"
-               style="border-left:0 solid transparent;border-top:0 solid transparent;"
-               @click="onChangeCornerPosition(CornerPosition.LeftTop)">
-            <img class="leftTop" :src="require('../res/corner-pos.svg')" alt="">
+          <div class="item" style="border-left: 0 solid transparent; border-top: 0 solid transparent" @click="onChangeCornerPosition(CornerPosition.LeftTop)">
+            <img class="leftTop" :src="require('../res/corner-pos.svg')" alt="" />
           </div>
-          <div class="item"
-               style="border-right: 0 solid transparent; border-top: 0 solid transparent;"
-               @click="onChangeCornerPosition(CornerPosition.RightTop)">
-            <img class="rightTop" :src="require('../res/corner-pos.svg')" alt="">
+          <div class="item" style="border-right: 0 solid transparent; border-top: 0 solid transparent" @click="onChangeCornerPosition(CornerPosition.RightTop)">
+            <img class="rightTop" :src="require('../res/corner-pos.svg')" alt="" />
           </div>
         </div>
         <div class="row">
-          <div class="item"
-               style="border-left: 0 solid transparent; border-bottom: 0 solid transparent;"
-               @click="onChangeCornerPosition(CornerPosition.LeftBottom)">
-            <img class="leftBottom" :src="require('../res/corner-pos.svg')" alt="">
-
+          <div class="item" style="border-left: 0 solid transparent; border-bottom: 0 solid transparent" @click="onChangeCornerPosition(CornerPosition.LeftBottom)">
+            <img class="leftBottom" :src="require('../res/corner-pos.svg')" alt="" />
           </div>
-          <div class="item"
-               style="border-right: 0 solid transparent; border-bottom: 0 solid transparent;"
-               @click="onChangeCornerPosition(CornerPosition.RightBottom)">
-            <img class="rightBottom" :src="require('../res/corner-pos.svg')" alt="">
-
+          <div class="item" style="border-right: 0 solid transparent; border-bottom: 0 solid transparent" @click="onChangeCornerPosition(CornerPosition.RightBottom)">
+            <img class="rightBottom" :src="require('../res/corner-pos.svg')" alt="" />
           </div>
         </div>
         <div class="tips">角标位置</div>
       </div>
     </div>
   </CCSection>
-
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import CCProp from "cc-plugin/src/ui/packages/cc-prop";
-import CCSelect from "cc-plugin/src/ui/packages/cc-select";
-import CCInput from "cc-plugin/src/ui/packages/cc-input";
-import CcButton from "cc-plugin/src/ui/packages/cc-button";
+import { defineComponent, ref } from "vue";
 import Image from "./img.vue";
-import CCSection from "cc-plugin/src/ui/packages/cc-section";
-import Checkbox from "cc-plugin/src/ui/packages/cc-checkbox/checkbox.vue";
-import CcInputNumber from "cc-plugin/src/ui/packages/cc-input-number/index.vue";
 import { CornerPosition } from "./data";
-import Canvas from './canvas';
+import Canvas from "./canvas";
 import { selectFile } from "./util";
 import CCP from "cc-plugin/src/ccp/entry-render";
-
+import ccui from "@xuyanfeng/cc-ui";
+const { CCButtonGroup, CCSection, CCCheckBox, CCInputNumber, CCButton, CCProp, CCInput, CCSelect } = ccui.components;
 export default defineComponent({
-  name: 'corner',
+  name: "corner",
   components: {
-    CCProp, CCSelect, CCInput, CcButton, Image,
+    CCButtonGroup,
     CCSection,
-    Checkbox, CcInputNumber
+    CCCheckBox,
+    CCInputNumber,
+    CCButton,
+    CCProp,
+    CCInput,
+    CCSelect,
+    Image,
   },
   setup(props, { emit }) {
     const isWeb = ref(CCP.Adaptation.Env.isWeb);
@@ -77,8 +65,9 @@ export default defineComponent({
         Canvas.loadCorner(data);
       }
     }
-
+    const cornerFile = ref("");
     return {
+      cornerFile,
       isWeb,
       enabledCorner,
       CornerPosition,
@@ -93,16 +82,15 @@ export default defineComponent({
         const imageData = await selectFile();
         onSelectCorner(imageData);
       },
-    }
-  }
-})
+    };
+  },
+});
 </script>
 <style scoped lang="less">
 .corner {
   .content {
     display: flex;
     flex-direction: row;
-
 
     .pos {
       position: relative;
@@ -176,5 +164,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

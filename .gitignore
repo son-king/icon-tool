@@ -2,3 +2,4 @@
 /.yalc/cc-plugin/
 /node_modules/
 /dist/
+yalc.lock
