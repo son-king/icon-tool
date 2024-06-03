@@ -1,13 +1,10 @@
-import Node from './node'
+import Node from "./node";
 import { Canvas } from "./canvas";
 
 export default class Board extends Node {
-    constructor() {
-        super();
-    }
+  constructor() {
+    super();
+  }
 
-    draw(canvas: Canvas) {
-
-
-    }
+  draw(canvas: Canvas) {}
 }

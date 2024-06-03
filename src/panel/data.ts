@@ -1,6 +1,6 @@
 export enum CornerPosition {
-    LeftTop,
-    LeftBottom,
-    RightTop,
-    RightBottom,
+  LeftTop,
+  LeftBottom,
+  RightTop,
+  RightBottom,
 }

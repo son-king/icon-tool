@@ -20,17 +20,17 @@
             <CCButton color="green" @click="onSelectAllSize">全选</CCButton>
           </CCProp>
           <div class="targetSizes">
-            <Checkbox v-model:value="item.use" :key="index" style="margin: 0 4px" v-for="(item, index) in allSizeSettings">
+            <CCCheckBox v-model:value="item.use" :key="index" style="margin: 0 4px" v-for="(item, index) in allSizeSettings">
               <template v-slot:label>
                 <span style="user-select: none; cursor: pointer" @click="onClickItemSize(item)">{{ item.width }}*{{ item.height }}</span>
               </template>
-            </Checkbox>
+            </CCCheckBox>
           </div>
         </CCSection>
         <CCSection name="圆角">
           <template v-slot:header>
             <div style="display: flex; flex: 1; flex-direction: row; justify-content: flex-end">
-              <Checkbox v-model:value="enabledRound" label="启用" @change="onChangeRound"></Checkbox>
+              <CCCheckBox v-model:value="enabledRound" label="启用" @change="onChangeRound"></CCCheckBox>
             </div>
           </template>
           <CCProp name="尺寸">

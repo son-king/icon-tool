@@ -2,7 +2,7 @@
   <CCSection name="角标" class="corner">
     <template v-slot:header>
       <div style="display: flex; flex: 1; flex-direction: row; justify-content: flex-end">
-        <Checkbox v-model:value="enabledCorner" @change="onChangeCornerEnabled" label="启用"></Checkbox>
+        <CCCheckBox v-model:value="enabledCorner" @change="onChangeCornerEnabled" label="启用"></CCCheckBox>
       </div>
     </template>
     <div class="content">
