@@ -11,13 +11,13 @@
           <Image @change="onSelectIcon"></Image>
           <CCProp name="文件" v-if="false">
             <CCInput :disabled="true" v-model:value="pngFile"></CCInput>
-            <CcButton @click="onSelectIconFile">...</CcButton>
-            <CcButton v-show="!isWeb"><i class="iconfont icon-folder"></i></CcButton>
+            <CCButton @click="onSelectIconFile">...</CCButton>
+            <CCButton v-show="!isWeb"><i class="iconfont icon-folder"></i></CCButton>
           </CCProp>
           <CCProp name="生成尺寸">
-            <CcInputNumber v-model:value="newSize" style="flex: 1" :min="0"></CcInputNumber>
-            <CcButton color="green" @click="onAddNewSize">新增</CcButton>
-            <CcButton color="green" @click="onSelectAllSize">全选</CcButton>
+            <CCInputNumber v-model:value="newSize" style="flex: 1" :min="0"></CCInputNumber>
+            <CCButton color="green" @click="onAddNewSize">新增</CCButton>
+            <CCButton color="green" @click="onSelectAllSize">全选</CCButton>
           </CCProp>
           <div class="targetSizes">
             <Checkbox v-model:value="item.use" :key="index" style="margin: 0 4px" v-for="(item, index) in allSizeSettings">
@@ -34,21 +34,21 @@
             </div>
           </template>
           <CCProp name="尺寸">
-            <CcInputNumber v-model:value="radius" :min="0" style="flex: 1" @change="onChangeRound"></CcInputNumber>
+            <CCInputNumber v-model:value="radius" :min="0" style="flex: 1" @change="onChangeRound"></CCInputNumber>
           </CCProp>
         </CCSection>
         <corner></corner>
         <CCSection v-if="!isWeb && false" name="替换项目图标">
-          <cc-prop name="目标工程">
+          <CCProp name="目标工程">
             <CCSelect :data="targets" value="1"></CCSelect>
-          </cc-prop>
+          </CCProp>
           <div style="display: flex; flex-direction: row; justify-content: flex-end">
-            <CcButton @click="onReplace" color="green">替换</CcButton>
+            <CCButton @click="onReplace" color="green">替换</CCButton>
           </div>
         </CCSection>
       </div>
       <div style="display: flex; flex-direction: row; justify-content: flex-end; margin: 3px 0">
-        <CcButton @click="onGenBySize" color="blue">批量生成</CcButton>
+        <CCButton @click="onGenBySize" color="blue">批量生成</CCButton>
       </div>
     </div>
   </div>

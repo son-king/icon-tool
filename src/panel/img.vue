@@ -1,25 +1,24 @@
 <template>
   <div class="img" @click="onAdd">
-    <img :src="imageData" v-if="imageData" alt=""/>
-    <div class="add" v-if="!imageData"><span style="font-size: 60px;user-select: none;">+</span></div>
+    <img :src="imageData" v-if="imageData" alt="" />
+    <div class="add" v-if="!imageData"><span style="font-size: 60px; user-select: none">+</span></div>
     <div class="info" v-if="imageData">
-      <div class="board">
-        {{ imgWidth }}*{{ imgHeight }}
-      </div>
+      <div class="board">{{ imgWidth }}*{{ imgHeight }}</div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { getImageSizeByBase64, selectFile } from "./util";
+import { defineComponent, ref } from "vue";
+import { selectFile } from "./util";
+import { Base64 } from "cc-plugin/src/ccp/util/base64";
 
 export default defineComponent({
-  name: 'a-img',
-  emits: ['change'],
+  name: "a-img",
+  emits: ["change"],
   props: {
     data: {
       type: String,
-      default: '',
+      default: "",
     },
     width: {
       type: Number,
@@ -41,18 +40,18 @@ export default defineComponent({
       async onAdd() {
         const data = await selectFile();
         if (data) {
-          const size = await getImageSizeByBase64(data);
+          const size = await Base64.getBase64WidthHeight(data);
           if (size) {
             const { width, height } = size;
             imgWidth.value = width;
             imgHeight.value = height;
           }
           imageData.value = data;
-          emit('change', data);
+          emit("change", data);
         }
       },
     };
-  }
+  },
 });
 </script>
 <style scoped lang="less">

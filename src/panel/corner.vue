@@ -9,8 +9,8 @@
       <Image @change="onSelectCorner"></Image>
       <CCProp name="文件" v-if="false">
         <CCInput :disabled="true" v-model:value="cornerFile"></CCInput>
-        <CcButton @click="onSelectCornerFile">...</CcButton>
-        <CcButton v-show="!isWeb"><i class="iconfont icon-folder"></i></CcButton>
+        <CCButton @click="onSelectCornerFile">...</CCButton>
+        <CCButton v-show="!isWeb"><i class="iconfont icon-folder"></i></CCButton>
       </CCProp>
       <div class="pos">
         <div class="row">
