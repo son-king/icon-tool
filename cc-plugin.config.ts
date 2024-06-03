@@ -39,7 +39,7 @@ const options: CocosPluginOptions = {
   outputProject: {
     v2: "",
     v3: "",
-    web: "./dist",
+    web: "./web",
   },
 };
 

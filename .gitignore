@@ -2,5 +2,6 @@
 /.yalc/cc-plugin/
 /node_modules/
 /dist/
+/web/
 yalc.lock
 cc-plugin.json
