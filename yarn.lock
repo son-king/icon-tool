@@ -1201,6 +1201,11 @@
     vue3-resize-directive "2.0.3"
     xmlhttprequest "1.8.0"
 
+"@xuyanfeng/chokidar-browserify@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@xuyanfeng/chokidar-browserify/-/chokidar-browserify-1.0.1.tgz#59f190f1e16290fa11eaaef8de72ab0f43cd481f"
+  integrity sha512-2xhqQrnPivSDrf35WEuoSI26fj7gxSoYT+22B9ENT7GbP3kgGF38nWCLYw1yHNtPlMJJpqo63vcLyNwc41TSDg==
+
 "@xuyanfeng/express-browserify@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@xuyanfeng/express-browserify/-/express-browserify-1.0.0.tgz#55eef8697650c5d279e39ce4218f8075c63d9e0b"
@@ -1211,10 +1216,10 @@
   resolved "https://registry.yarnpkg.com/@xuyanfeng/fs-browserify/-/fs-browserify-1.0.0.tgz#808811e8d7e2fb8bcad9fd7290a4ca0f280bc585"
   integrity sha512-Tir61SPNwFLSRE18QsD8vJZg78td9+uDDUnyWB/iP896zhqhzXlqJnPOKOIZEPs4dQ1IqjZZfFwJ9STIH2uD+A==
 
-"@xuyanfeng/fs-extra-browserify@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@xuyanfeng/fs-extra-browserify/-/fs-extra-browserify-1.0.0.tgz#fa4da807ae7754a67a98f30f57431748fabaad99"
-  integrity sha512-hC93w1kngskl3GUgsL6HsqVyDUcTb5HaNHq1llQjQRJ6BBP0JRORRQLXZiGBfu518Zboiqk648g7SKw+WUgU/g==
+"@xuyanfeng/fs-extra-browserify@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@xuyanfeng/fs-extra-browserify/-/fs-extra-browserify-1.0.1.tgz#d20e9ae6f48f9027add4679bac9b40bb9249b60c"
+  integrity sha512-K+bLekY4iiZ/PD/SU15VvyZrIxiOCv4TB/YUBev+is/jHoGYasV4lCJParBSAUbLcm6hFifcq3Y9Pi4dQAGhug==
 
 "@xuyanfeng/globby-browserify@^1.0.0":
   version "1.0.0"
@@ -1887,18 +1892,19 @@ case-sensitive-paths-webpack-plugin@^2.3.0:
   resolved "https://registry.npmmirror.com/case-sensitive-paths-webpack-plugin/-/case-sensitive-paths-webpack-plugin-2.4.0.tgz#db64066c6422eed2e08cc14b986ca43796dbc6d4"
   integrity sha512-roIFONhcxog0JSSWbvVAh3OocukmSgpqOH6YpMkCvav/ySIV3JKg4Dc8vYtQjYi/UxpNE36r/9v+VqTQqgkYmw==
 
-cc-plugin@2.1.44:
-  version "2.1.44"
-  resolved "https://registry.yarnpkg.com/cc-plugin/-/cc-plugin-2.1.44.tgz#408db25d56fa8c84e1f91b8a3ecad2d2b0076725"
-  integrity sha512-g/tDge6EK3BYIZ0Nd4KxU9lfOHsOhWAF05z2OWviAGa0lyhk/27i6WTwONf95WJDoPVaz1UXOxbIp4CRR5TEWw==
+cc-plugin@^2.1.44:
+  version "2.1.51"
+  resolved "https://registry.yarnpkg.com/cc-plugin/-/cc-plugin-2.1.51.tgz#0e2af5ed7362fa87dda06bfe1d8a1e09137e1239"
+  integrity sha512-hANtfEWh+SW8FM/eyzO3COz5z6cFkCJhwEM839wHHYmuvT04QZJS9JqmPseuswwmiLQawrhP9/Ii0ziHLLj2Lw==
   dependencies:
     "@babel/generator" "^7.16.8"
     "@popperjs/core" "^2.11.6"
     "@vue/cli-service" "^5.0.0-rc.1"
     "@vue/compiler-sfc" "3.2.26"
+    "@xuyanfeng/chokidar-browserify" "^1.0.1"
     "@xuyanfeng/express-browserify" "^1.0.0"
     "@xuyanfeng/fs-browserify" "^1.0.0"
-    "@xuyanfeng/fs-extra-browserify" "^1.0.0"
+    "@xuyanfeng/fs-extra-browserify" "^1.0.1"
     "@xuyanfeng/globby-browserify" "^1.0.0"
     "@xuyanfeng/sharp-browserify" "^1.0.0"
     assert "^2.0.0"

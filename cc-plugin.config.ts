@@ -6,6 +6,9 @@ const manifest: CocosPluginManifest = {
   description: "icon 小工具",
   author: "xu_yanfeng",
   main: "./src/main.ts",
+  analysis: {
+    tongjiniao: "656939525843935232",
+  },
   panels: [
     {
       name: "main",
