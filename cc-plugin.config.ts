@@ -31,6 +31,8 @@ const manifest: CocosPluginManifest = {
   ],
   i18n_en: "./src/i18n/en.ts",
   i18n_zh: "./src/i18n/zh.ts",
+  hooks: "./src/hooks.ts",
+  builder: "./src/builder.ts",
 };
 // 这里的options变量名暂时不支持修改，发布时会进行必要的修改
 const options: CocosPluginOptions = {

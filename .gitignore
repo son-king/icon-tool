@@ -5,3 +5,4 @@
 /web/
 yalc.lock
 cc-plugin.json
+.yalc/
